@@ -1,0 +1,283 @@
+{% extends 'base.html' %}
+
+{% block title %}ثبت سرویس جدید - سیستم مدیریت سرویس دوره‌ای خودرو{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">ثبت سرویس جدید</h5>
+                </div>
+                <div class="card-body">
+                    <!-- فرم جستجوی خودرو با شماره موبایل -->
+                    <div class="mb-4">
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="search_phone" placeholder="جستجو با شماره موبایل مالک (مثال: 09123456789)">
+                            <button class="btn btn-primary" type="button" id="search_car_btn">
+                                <i class="fas fa-search"></i> جستجو
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- لیست خودروهای یافت شده -->
+                    <div id="cars_list" class="mb-4" style="display: none;">
+                        <h6>خودروهای یافت شده:</h6>
+                        <div class="list-group" id="cars_container">
+                            <!-- خودروها اینجا نمایش داده می‌شوند -->
+                        </div>
+                    </div>
+
+                    <form method="post" id="service_form">
+                        {% csrf_token %}
+                        
+                        <!-- فرم اطلاعات خودرو -->
+                        <div class="mb-4">
+                            <h6 class="mb-3">اطلاعات خودرو</h6>
+                            <div class="row mb-3">
+                                <div class="col">
+                                    <label class="form-label">شماره پلاک</label>
+                                    <div class="d-flex gap-2">
+                                        <input type="text" class="form-control text-center" name="plate_part1" maxlength="2" placeholder="59" style="width: 60px;" required>
+                                        <span class="align-self-center">-</span>
+                                        <input type="text" class="form-control text-center" name="plate_part2" maxlength="3" placeholder="365" style="width: 80px;" required>
+                                        <select class="form-select" name="plate_part3" style="width: 80px;" required>
+                                            <option value="م">م</option>
+                                            <option value="ع">ع</option>
+                                        </select>
+                                        <input type="text" class="form-control text-center" name="plate_part4" maxlength="2" placeholder="33" style="width: 60px;" required>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="owner_name" class="form-label">نام مالک</label>
+                                        <input type="text" class="form-control" id="owner_name" name="owner_name" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="owner_phone" class="form-label">شماره موبایل مالک</label>
+                                        <input type="tel" class="form-control" id="owner_phone" name="owner_phone" 
+                                               pattern="09[0-9]{9}" placeholder="مثال: 09123456789" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <input type="hidden" name="car_id" id="car_id">
+                        
+                        <div class="mb-3">
+                            <label for="mileage" class="form-label">کیلومتر فعلی</label>
+                            <input type="number" class="form-control" id="mileage" name="mileage" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="oil_type" class="form-label">نوع روغن</label>
+                            <input type="text" class="form-control" id="oil_type" name="oil_type" required>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="mb-3 form-check">
+                                    <input type="checkbox" class="form-check-input" id="oil_filter_changed" name="oil_filter_changed">
+                                    <label class="form-check-label" for="oil_filter_changed">تعویض فیلتر روغن</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3 form-check">
+                                    <input type="checkbox" class="form-check-input" id="air_filter_changed" name="air_filter_changed">
+                                    <label class="form-check-label" for="air_filter_changed">تعویض فیلتر هوا</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3 form-check">
+                                    <input type="checkbox" class="form-check-input" id="cabin_filter_changed" name="cabin_filter_changed">
+                                    <label class="form-check-label" for="cabin_filter_changed">تعویض فیلتر کابین</label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="mb-3 form-check">
+                                    <input type="checkbox" class="form-check-input" id="radiator_water_checked" name="radiator_water_checked">
+                                    <label class="form-check-label" for="radiator_water_checked">چک آب رادیاتور انجام شد</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3 form-check">
+                                    <input type="checkbox" class="form-check-input" id="windshield_washer_filled" name="windshield_washer_filled">
+                                    <label class="form-check-label" for="windshield_washer_filled">شیشه شور عقب و جلو پر شد</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3 form-check">
+                                    <input type="checkbox" class="form-check-input" id="brake_fluid_checked" name="brake_fluid_checked">
+                                    <label class="form-check-label" for="brake_fluid_checked">روغن ترمز چک شد</label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="mb-3 form-check">
+                                    <input type="checkbox" class="form-check-input" id="power_steering_fluid_checked" name="power_steering_fluid_checked">
+                                    <label class="form-check-label" for="power_steering_fluid_checked">روغن هیدرولیک فرمان چک شد</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3 form-check">
+                                    <input type="checkbox" class="form-check-input" id="gearbox_oil_checked" name="gearbox_oil_checked">
+                                    <label class="form-check-label" for="gearbox_oil_checked">واسکازین چک شد</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="gearbox_oil_change_date" class="form-label">تاریخ تعویض واسکازین</label>
+                                    <input type="datetime-local" class="form-control" id="gearbox_oil_change_date" name="gearbox_oil_change_date">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="notes" class="form-label">توضیحات</label>
+                            <textarea class="form-control" id="notes" name="notes" rows="3"></textarea>
+                        </div>
+                        
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> ثبت سرویس
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- مودال پیام -->
+<div class="modal fade" id="messageModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="messageModalTitle"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p id="messageModalBody"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">تایید</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const messageModal = new bootstrap.Modal(document.getElementById('messageModal'));
+    const searchPhoneInput = document.getElementById('search_phone');
+    const searchCarBtn = document.getElementById('search_car_btn');
+    const carsList = document.getElementById('cars_list');
+    const carsContainer = document.getElementById('cars_container');
+    const newCarForm = document.getElementById('new_car_form');
+    const carIdInput = document.getElementById('car_id');
+    const ownerNameInput = document.getElementById('owner_name');
+    const ownerPhoneInput = document.getElementById('owner_phone');
+    const plateInputs = document.querySelectorAll('[name^="plate_part"]');
+    
+    // نمایش پیام‌ها
+    {% if messages %}
+        {% for message in messages %}
+            document.getElementById('messageModalTitle').textContent = '{% if message.tags == "error" %}خطا{% else %}موفقیت{% endif %}';
+            document.getElementById('messageModalBody').textContent = '{{ message }}';
+            messageModal.show();
+        {% endfor %}
+    {% endif %}
+    
+    // جستجوی خودرو با شماره موبایل
+    searchCarBtn.addEventListener('click', function() {
+        const phone = searchPhoneInput.value.trim();
+        if (!phone) {
+            showMessage('خطا', 'لطفاً شماره موبایل را وارد کنید');
+            return;
+        }
+        
+        fetch(`/api/cars/search/?phone=${phone}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.cars && data.cars.length > 0) {
+                    carsContainer.innerHTML = '';
+                    data.cars.forEach(car => {
+                        const button = document.createElement('button');
+                        button.type = 'button';
+                        button.className = 'list-group-item list-group-item-action';
+                        button.innerHTML = `${car.plate_number} - ${car.owner_name}`;
+                        button.addEventListener('click', () => selectCar(car));
+                        carsContainer.appendChild(button);
+                    });
+                    carsList.style.display = 'block';
+                    newCarForm.style.display = 'none';
+                } else {
+                    showMessage('اطلاع', 'خودرویی با این شماره موبایل یافت نشد. لطفاً اطلاعات خودرو را وارد کنید.');
+                    carsList.style.display = 'none';
+                    newCarForm.style.display = 'block';
+                    ownerPhoneInput.value = phone;
+                }
+            })
+            .catch(error => {
+                showMessage('خطا', 'خطا در جستجوی خودرو');
+            });
+    });
+    
+    // انتخاب خودرو از لیست
+    function selectCar(car) {
+        carIdInput.value = car.id;
+        ownerNameInput.value = car.owner_name;
+        ownerPhoneInput.value = car.owner_phone;
+        
+        // تفکیک شماره پلاک
+        const parts = car.plate_number.split(/[-م]/);
+        document.querySelector('[name="plate_part1"]').value = parts[0];
+        document.querySelector('[name="plate_part2"]').value = parts[1];
+        document.querySelector('[name="plate_part3"]').value = 'م';
+        document.querySelector('[name="plate_part4"]').value = parts[2];
+        
+        carsList.style.display = 'none';
+        newCarForm.style.display = 'block';
+    }
+    
+    // نمایش پیام
+    function showMessage(title, message) {
+        document.getElementById('messageModalTitle').textContent = title;
+        document.getElementById('messageModalBody').textContent = message;
+        messageModal.show();
+    }
+    
+    // اتصال شماره پلاک قبل از ارسال فرم
+    document.getElementById('service_form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // ساخت شماره پلاک کامل
+        const plateNumber = `${plateInputs[0].value}-${plateInputs[1].value}${plateInputs[2].value}${plateInputs[3].value}`;
+        
+        // اضافه کردن شماره پلاک به فرم
+        const plateInput = document.createElement('input');
+        plateInput.type = 'hidden';
+        plateInput.name = 'plate_number';
+        plateInput.value = plateNumber;
+        this.appendChild(plateInput);
+        
+        // ارسال فرم
+        this.submit();
+    });
+});
+</script>
+{% endblock %} 

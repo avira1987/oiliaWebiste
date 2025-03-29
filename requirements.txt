@@ -1,0 +1,5 @@
+Django==4.2.20
+djangorestframework==3.15.2
+mysqlclient==2.2.7
+kavenegar==1.1.2
+python-dotenv==1.0.0 

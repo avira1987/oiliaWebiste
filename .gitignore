@@ -1,0 +1,4 @@
+/venv
+/service_manager/__pycache__
+/car_service_manager/__pycache__
+db.sqlite3

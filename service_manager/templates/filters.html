@@ -1,0 +1,296 @@
+{% extends 'base.html' %}
+
+{% block title %}فیلترها و لوازم مصرفی - سیستم مدیریت سرویس دوره‌ای خودرو{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="card-title mb-0">فیلترها</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>نوع فیلتر</th>
+                                <th>تعداد موجود</th>
+                                <th>حداقل موجودی</th>
+                                <th>وضعیت</th>
+                                <th>عملیات</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for filter in filters %}
+                            <tr>
+                                <td>{{ filter.name }}</td>
+                                <td>{{ filter.quantity }}</td>
+                                <td>{{ filter.min_quantity }}</td>
+                                <td>
+                                    {% if filter.quantity <= filter.min_quantity %}
+                                    <span class="badge bg-danger">کمبود</span>
+                                    {% else %}
+                                    <span class="badge bg-success">موجود</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-sm btn-outline-primary" onclick="editFilter({{ filter.id }})">
+                                        <i class="bi bi-pencil"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-success" onclick="addStock({{ filter.id }})">
+                                        <i class="bi bi-plus-circle"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="5" class="text-center">هیچ فیلتری ثبت نشده است</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">لوازم مصرفی</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>نام کالا</th>
+                                <th>تعداد موجود</th>
+                                <th>حداقل موجودی</th>
+                                <th>وضعیت</th>
+                                <th>عملیات</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in consumables %}
+                            <tr>
+                                <td>{{ item.name }}</td>
+                                <td>{{ item.quantity }}</td>
+                                <td>{{ item.min_quantity }}</td>
+                                <td>
+                                    {% if item.quantity <= item.min_quantity %}
+                                    <span class="badge bg-danger">کمبود</span>
+                                    {% else %}
+                                    <span class="badge bg-success">موجود</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-sm btn-outline-primary" onclick="editConsumable({{ item.id }})">
+                                        <i class="bi bi-pencil"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-success" onclick="addStock({{ item.id }})">
+                                        <i class="bi bi-plus-circle"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="5" class="text-center">هیچ کالایی ثبت نشده است</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="card-title mb-0">افزودن فیلتر جدید</h5>
+            </div>
+            <div class="card-body">
+                <form method="post" action="{% url 'add_filter' %}">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="filter_name" class="form-label">نام فیلتر</label>
+                        <input type="text" class="form-control" id="filter_name" name="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="filter_quantity" class="form-label">تعداد</label>
+                        <input type="number" class="form-control" id="filter_quantity" name="quantity" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="filter_min_quantity" class="form-label">حداقل موجودی</label>
+                        <input type="number" class="form-control" id="filter_min_quantity" name="min_quantity" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="bi bi-plus-circle"></i> افزودن
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">افزودن کالای جدید</h5>
+            </div>
+            <div class="card-body">
+                <form method="post" action="{% url 'add_consumable' %}">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="item_name" class="form-label">نام کالا</label>
+                        <input type="text" class="form-control" id="item_name" name="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="item_quantity" class="form-label">تعداد</label>
+                        <input type="number" class="form-control" id="item_quantity" name="quantity" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="item_min_quantity" class="form-label">حداقل موجودی</label>
+                        <input type="number" class="form-control" id="item_min_quantity" name="min_quantity" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="bi bi-plus-circle"></i> افزودن
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- مودال ویرایش فیلتر -->
+<div class="modal fade" id="editFilterModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">ویرایش فیلتر</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="post" id="editFilterForm">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <input type="hidden" id="filter_id" name="id">
+                    <div class="mb-3">
+                        <label for="edit_filter_name" class="form-label">نام فیلتر</label>
+                        <input type="text" class="form-control" id="edit_filter_name" name="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit_filter_quantity" class="form-label">تعداد</label>
+                        <input type="number" class="form-control" id="edit_filter_quantity" name="quantity" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit_filter_min_quantity" class="form-label">حداقل موجودی</label>
+                        <input type="number" class="form-control" id="edit_filter_min_quantity" name="min_quantity" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">انصراف</button>
+                    <button type="submit" class="btn btn-primary">ذخیره تغییرات</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- مودال ویرایش کالا -->
+<div class="modal fade" id="editConsumableModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">ویرایش کالا</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="post" id="editConsumableForm">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <input type="hidden" id="consumable_id" name="id">
+                    <div class="mb-3">
+                        <label for="edit_item_name" class="form-label">نام کالا</label>
+                        <input type="text" class="form-control" id="edit_item_name" name="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit_item_quantity" class="form-label">تعداد</label>
+                        <input type="number" class="form-control" id="edit_item_quantity" name="quantity" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit_item_min_quantity" class="form-label">حداقل موجودی</label>
+                        <input type="number" class="form-control" id="edit_item_min_quantity" name="min_quantity" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">انصراف</button>
+                    <button type="submit" class="btn btn-primary">ذخیره تغییرات</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- مودال افزودن موجودی -->
+<div class="modal fade" id="addStockModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">افزودن موجودی</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="post" id="addStockForm">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <input type="hidden" id="stock_item_id" name="id">
+                    <input type="hidden" id="stock_item_type" name="type">
+                    <div class="mb-3">
+                        <label for="stock_quantity" class="form-label">تعداد</label>
+                        <input type="number" class="form-control" id="stock_quantity" name="quantity" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">انصراف</button>
+                    <button type="submit" class="btn btn-primary">افزودن</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function editFilter(id) {
+    // دریافت اطلاعات فیلتر از API
+    fetch(`/api/filters/${id}/`)
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('filter_id').value = data.id;
+            document.getElementById('edit_filter_name').value = data.name;
+            document.getElementById('edit_filter_quantity').value = data.quantity;
+            document.getElementById('edit_filter_min_quantity').value = data.min_quantity;
+            document.getElementById('editFilterForm').action = `/filters/${id}/edit/`;
+            new bootstrap.Modal(document.getElementById('editFilterModal')).show();
+        });
+}
+
+function editConsumable(id) {
+    // دریافت اطلاعات کالا از API
+    fetch(`/api/consumables/${id}/`)
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('consumable_id').value = data.id;
+            document.getElementById('edit_item_name').value = data.name;
+            document.getElementById('edit_item_quantity').value = data.quantity;
+            document.getElementById('edit_item_min_quantity').value = data.min_quantity;
+            document.getElementById('editConsumableForm').action = `/consumables/${id}/edit/`;
+            new bootstrap.Modal(document.getElementById('editConsumableModal')).show();
+        });
+}
+
+function addStock(id) {
+    const type = id.toString().startsWith('F') ? 'filter' : 'consumable';
+    document.getElementById('stock_item_id').value = id;
+    document.getElementById('stock_item_type').value = type;
+    document.getElementById('addStockForm').action = `/${type}s/${id}/add_stock/`;
+    new bootstrap.Modal(document.getElementById('addStockModal')).show();
+}
+</script>
+{% endblock %} 

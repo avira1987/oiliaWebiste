@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block title %}جزئیات سرویس - سیستم مدیریت سرویس دوره‌ای خودرو{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">جزئیات سرویس خودرو</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <h6>اطلاعات خودرو</h6>
+                            <p><strong>شماره پلاک:</strong> {{ service.car.plate_number }}</p>
+                            <p><strong>نام مالک:</strong> {{ service.car.owner_name }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>اطلاعات سرویس</h6>
+                            <p><strong>تاریخ سرویس:</strong> {{ service.date|date:"Y/m/d" }}</p>
+                            <p><strong>تاریخ سرویس بعدی:</strong> {{ service.next_service_date|date:"Y/m/d" }}</p>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <h6>جزئیات سرویس</h6>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p><strong>کیلومتر فعلی:</strong> {{ service.mileage }}</p>
+                                <p><strong>نوع روغن:</strong> {{ service.oil_type }}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>تعویض فیلتر روغن:</strong> {% if service.oil_filter_changed %}بله{% else %}خیر{% endif %}</p>
+                                <p><strong>تعویض فیلتر هوا:</strong> {% if service.air_filter_changed %}بله{% else %}خیر{% endif %}</p>
+                                <p><strong>تعویض فیلتر کابین:</strong> {% if service.cabin_filter_changed %}بله{% else %}خیر{% endif %}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <h6>بررسی‌های انجام شده</h6>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p><strong>چک آب رادیاتور:</strong> {% if service.radiator_water_checked %}بله{% else %}خیر{% endif %}</p>
+                                <p><strong>پر کردن شیشه شور:</strong> {% if service.windshield_washer_filled %}بله{% else %}خیر{% endif %}</p>
+                                <p><strong>چک روغن ترمز:</strong> {% if service.brake_fluid_checked %}بله{% else %}خیر{% endif %}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>چک روغن هیدرولیک فرمان:</strong> {% if service.power_steering_fluid_checked %}بله{% else %}خیر{% endif %}</p>
+                                <p><strong>چک واسکازین:</strong> {% if service.gearbox_oil_checked %}بله{% else %}خیر{% endif %}</p>
+                                {% if service.gearbox_oil_change_date %}
+                                <p><strong>تاریخ تعویض واسکازین:</strong> {{ service.gearbox_oil_change_date|date:"Y/m/d" }}</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    {% if service.notes %}
+                    <div class="mb-4">
+                        <h6>توضیحات</h6>
+                        <p>{{ service.notes }}</p>
+                    </div>
+                    {% endif %}
+
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle"></i>
+                        لطفاً در تاریخ سرویس بعدی ({{ service.next_service_date|date:"Y/m/d" }}) برای انجام سرویس مراجعه فرمایید.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

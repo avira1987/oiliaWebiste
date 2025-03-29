@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+
+{% block title %}ویرایش سرویس - سیستم مدیریت سرویس دوره‌ای خودرو{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">ویرایش سرویس</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="car" class="form-label">خودرو</label>
+                                    <select class="form-select" id="car" name="car" required>
+                                        {% for car in cars %}
+                                        <option value="{{ car.id }}" {% if car.id == service.car.id %}selected{% endif %}>
+                                            {{ car.plate_number }} - {{ car.owner_name }}
+                                        </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="mileage" class="form-label">کیلومتر</label>
+                                    <input type="number" class="form-control" id="mileage" name="mileage" 
+                                           value="{{ service.mileage }}" required>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="oil_type" class="form-label">نوع روغن</label>
+                                    <input type="text" class="form-control" id="oil_type" name="oil_type" 
+                                           value="{{ service.oil_type }}" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="oil_quantity" class="form-label">مقدار روغن (لیتر)</label>
+                                    <input type="number" step="0.1" class="form-control" id="oil_quantity" 
+                                           name="oil_quantity" value="{{ service.oil_quantity }}" required>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="mb-3 form-check">
+                                    <input type="checkbox" class="form-check-input" id="oil_filter_changed" 
+                                           name="oil_filter_changed" {% if service.oil_filter_changed %}checked{% endif %}>
+                                    <label class="form-check-label" for="oil_filter_changed">تعویض فیلتر روغن</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3 form-check">
+                                    <input type="checkbox" class="form-check-input" id="air_filter_changed" 
+                                           name="air_filter_changed" {% if service.air_filter_changed %}checked{% endif %}>
+                                    <label class="form-check-label" for="air_filter_changed">تعویض فیلتر هوا</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3 form-check">
+                                    <input type="checkbox" class="form-check-input" id="fuel_filter_changed" 
+                                           name="fuel_filter_changed" {% if service.fuel_filter_changed %}checked{% endif %}>
+                                    <label class="form-check-label" for="fuel_filter_changed">تعویض فیلتر سوخت</label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="notes" class="form-label">توضیحات</label>
+                            <textarea class="form-control" id="notes" name="notes" rows="3">{{ service.notes }}</textarea>
+                        </div>
+                        
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> ذخیره تغییرات
+                            </button>
+                            <a href="{% url 'service_history' %}" class="btn btn-secondary">
+                                <i class="fas fa-times"></i> انصراف
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

@@ -1,0 +1,385 @@
+:root {
+    --primary-color: #0d6efd;
+    --secondary-color: #6c757d;
+    --accent-color: #0dcaf0;
+    --text-color: #212529;
+    --bg-color: #f8f9fa;
+    --card-bg: #ffffff;
+    --border-color: #dee2e6;
+    --success-color: #198754;
+    --danger-color: #dc3545;
+    --warning-color: #ffc107;
+    --info-color: #0dcaf0;
+}
+
+/* استایل‌های عمومی */
+body {
+    font-family: 'Vazir', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    line-height: 1.6;
+}
+
+/* استایل‌های ناوبری */
+.navbar {
+    background-color: var(--primary-color) !important;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.navbar-brand, .nav-link {
+    color: var(--text-color) !important;
+}
+
+/* استایل‌های بخش قهرمان */
+.hero-section {
+    background: linear-gradient(135deg, #0d6efd 0%, #0dcaf0 100%);
+    padding: 6rem 0;
+}
+
+.hero-section h1 {
+    font-size: 3.5rem;
+    line-height: 1.2;
+}
+
+.hero-section .lead {
+    font-size: 1.25rem;
+    opacity: 0.9;
+}
+
+/* استایل‌های کارت‌ها */
+.card {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card-header {
+    background-color: var(--secondary-color);
+    color: var(--text-color);
+    border-bottom: 1px solid var(--border-color);
+}
+
+/* استایل‌های جدول */
+.table {
+    margin-bottom: 0;
+    color: var(--text-color);
+}
+
+.table th {
+    border-top: none;
+    background-color: var(--secondary-color);
+    border-color: var(--border-color);
+}
+
+.table td {
+    border-color: var(--border-color);
+}
+
+/* استایل‌های دکمه‌ها */
+.btn {
+    border-radius: 0.25rem;
+    padding: 0.5rem 1.5rem;
+}
+
+.btn-group-sm > .btn {
+    padding: 0.25rem 0.5rem;
+}
+
+.btn-primary {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+}
+
+.btn-primary:hover {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+}
+
+/* استایل‌های فرم */
+.form-control {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+    border-radius: 0.25rem;
+}
+
+.form-control:focus {
+    background-color: var(--card-bg);
+    border-color: var(--accent-color);
+    color: var(--text-color);
+    box-shadow: 0 0 0 0.2rem rgba(57, 73, 171, 0.25);
+}
+
+/* استایل‌های مودال */
+.modal-content {
+    background-color: var(--card-bg);
+    color: var(--text-color);
+    border-radius: 0.5rem;
+}
+
+.modal-header {
+    background-color: var(--secondary-color);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.modal-footer {
+    background-color: var(--secondary-color);
+    border-top: 1px solid var(--border-color);
+}
+
+/* استایل‌های فوتر */
+footer {
+    margin-top: auto;
+    background-color: #fff;
+    box-shadow: 0 -2px 4px rgba(0,0,0,.05);
+}
+
+/* استایل‌های پیام‌های هشدار */
+.alert {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+    border-radius: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+/* استایل‌های صفحه‌بندی */
+.pagination {
+    margin-bottom: 0;
+}
+
+.page-link {
+    border-radius: 0.25rem;
+    margin: 0 0.25rem;
+}
+
+/* استایل‌های نشانگرها */
+.badge {
+    padding: 0.5em 0.75em;
+    font-weight: 500;
+}
+
+/* استایل‌های لیست */
+.list-group-item {
+    border-radius: 0.25rem;
+    margin-bottom: 0.5rem;
+}
+
+/* استایل‌های آیکون‌ها */
+.bi {
+    margin-left: 0.25rem;
+}
+
+/* استایل‌های بخش آمار */
+.stats-section {
+    background-color: var(--bg-color);
+}
+
+.stat-item {
+    padding: 2rem;
+}
+
+.stat-item h2 {
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+}
+
+/* استایل‌های بخش یادآوری‌ها */
+.reminders-section {
+    background-color: var(--bg-color);
+}
+
+/* استایل‌های بخش مشتریان */
+.customers-section .card {
+    border-radius: 1rem;
+}
+
+.customers-section .list-unstyled li {
+    padding: 0.5rem 0;
+}
+
+/* استایل‌های بخش تماس */
+.contact-section {
+    background-color: var(--bg-color);
+}
+
+/* استایل‌های ریسپانسیو */
+@media (max-width: 768px) {
+    .hero-section {
+        padding: 4rem 0;
+    }
+    
+    .hero-section h1 {
+        font-size: 2.5rem;
+    }
+    
+    .card-body {
+        padding: 1rem;
+    }
+    
+    .table-responsive {
+        margin-bottom: 1rem;
+    }
+    
+    .stat-item {
+        padding: 1rem;
+    }
+    
+    .stat-item h2 {
+        font-size: 2rem;
+    }
+}
+
+/* استایل‌های انیمیشن */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.hero-section,
+.features-section,
+.stats-section,
+.recent-services,
+.reminders-section,
+.customers-section,
+.contact-section {
+    animation: fadeIn 0.8s ease-out;
+}
+
+/* Toast Notifications */
+.toast-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.toast {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+}
+
+.toast-header {
+    background-color: var(--secondary-color);
+    color: var(--text-color);
+    border-bottom: 1px solid var(--border-color);
+}
+
+/* Service History Filters */
+.service-filters {
+    background-color: var(--card-bg);
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.filter-btn {
+    margin: 5px;
+    background-color: var(--secondary-color);
+    border-color: var(--border-color);
+}
+
+.filter-btn:hover {
+    background-color: var(--accent-color);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-color);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--accent-color);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--secondary-color);
+}
+
+/* Loading Spinner */
+.spinner-border {
+    color: var(--accent-color);
+}
+
+/* Alert Messages */
+.alert-success {
+    background-color: rgba(46, 125, 50, 0.2);
+    border-color: var(--success-color);
+}
+
+.alert-danger {
+    background-color: rgba(198, 40, 40, 0.2);
+    border-color: var(--danger-color);
+}
+
+.alert-warning {
+    background-color: rgba(249, 168, 37, 0.2);
+    border-color: var(--warning-color);
+}
+
+.alert-info {
+    background-color: rgba(21, 101, 192, 0.2);
+    border-color: var(--info-color);
+}
+
+/* استایل‌های مودال پیام */
+.modal-dialog-centered {
+    display: flex;
+    align-items: center;
+    min-height: calc(100% - 1rem);
+}
+
+.modal-content {
+    border-radius: 1rem;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.modal-header {
+    background-color: var(--primary-color);
+    color: var(--text-color);
+    border-radius: 1rem 1rem 0 0;
+    padding: 1.5rem;
+}
+
+.modal-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.modal-body {
+    padding: 2rem;
+}
+
+.modal-body p {
+    font-size: 1.25rem;
+    line-height: 1.6;
+    margin-bottom: 0;
+}
+
+.modal-footer {
+    padding: 1.5rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.modal-footer .btn {
+    padding: 0.5rem 2rem;
+    font-size: 1.1rem;
+} 

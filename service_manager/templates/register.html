@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+
+{% block title %}ثبت نام - سیستم مدیریت سرویس دوره‌ای خودرو{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">ثبت نام</h5>
+            </div>
+            <div class="card-body">
+                <form method="post" novalidate>
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label for="username" class="form-label">نام کاربری</label>
+                        <input type="text" class="form-control" id="username" name="username" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="email" class="form-label">ایمیل</label>
+                        <input type="email" class="form-control" id="email" name="email" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="phone_number" class="form-label">شماره موبایل</label>
+                        <input type="tel" class="form-control" id="phone_number" name="phone_number" 
+                               pattern="09[0-9]{9}" 
+                               title="شماره موبایل باید با 09 شروع شود و 11 رقم باشد"
+                               placeholder="مثال: 09123456789" required>
+                        <div class="form-text">شماره موبایل باید با 09 شروع شود و 11 رقم باشد</div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="password" class="form-label">رمز عبور</label>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="confirm_password" class="form-label">تکرار رمز عبور</label>
+                        <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-person-plus"></i> ثبت نام
+                        </button>
+                        <a href="{% url 'login' %}" class="btn btn-secondary">
+                            <i class="bi bi-box-arrow-in-right"></i> ورود
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- مودال پیام -->
+<div class="modal fade" id="messageModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">پیام سیستم</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body text-center">
+                <p id="messageText" class="fs-5"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">تایید</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // اعتبارسنجی شماره موبایل
+    const phoneInput = document.getElementById('phone_number');
+    phoneInput.addEventListener('input', function(e) {
+        const value = e.target.value;
+        if (!/^09\d{9}$/.test(value)) {
+            phoneInput.setCustomValidity('شماره موبایل باید با 09 شروع شود و 11 رقم باشد');
+        } else {
+            phoneInput.setCustomValidity('');
+        }
+    });
+
+    // اعتبارسنجی تطابق رمز عبور
+    const passwordInput = document.getElementById('password');
+    const confirmPasswordInput = document.getElementById('confirm_password');
+    
+    function validatePassword() {
+        if (passwordInput.value !== confirmPasswordInput.value) {
+            confirmPasswordInput.setCustomValidity('رمز عبور و تکرار آن مطابقت ندارند');
+        } else {
+            confirmPasswordInput.setCustomValidity('');
+        }
+    }
+    
+    passwordInput.addEventListener('input', validatePassword);
+    confirmPasswordInput.addEventListener('input', validatePassword);
+
+    // نمایش پیام‌ها در مودال
+    {% if messages %}
+    const messageModal = new bootstrap.Modal(document.getElementById('messageModal'));
+    const messageText = document.getElementById('messageText');
+    
+    {% for message in messages %}
+    messageText.textContent = '{{ message }}';
+    messageText.className = 'fs-5 {% if message.tags == "error" %}text-danger{% else %}text-success{% endif %}';
+    messageModal.show();
+    {% endfor %}
+    {% endif %}
+});
+</script>
+{% endblock %} 

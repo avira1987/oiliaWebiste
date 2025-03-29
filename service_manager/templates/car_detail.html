@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+
+{% block title %}جزئیات خودرو - {{ car.plate_number }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h4 class="mb-0">جزئیات خودرو</h4>
+                    <div>
+                        <a href="{% url 'new_service' %}?car={{ car.id }}" class="btn btn-success">
+                            <i class="fas fa-wrench"></i> ثبت سرویس جدید
+                        </a>
+                        <a href="{% url 'car_list' %}" class="btn btn-secondary">
+                            <i class="fas fa-arrow-right"></i> بازگشت به لیست
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5 class="card-title">اطلاعات خودرو</h5>
+                            <table class="table">
+                                <tr>
+                                    <th>شماره پلاک:</th>
+                                    <td>{{ car.plate_number }}</td>
+                                </tr>
+                                <tr>
+                                    <th>نام مالک:</th>
+                                    <td>{{ car.owner_name }}</td>
+                                </tr>
+                                <tr>
+                                    <th>شماره تماس:</th>
+                                    <td>{{ car.owner_phone }}</td>
+                                </tr>
+                                <tr>
+                                    <th>کیلومتر فعلی:</th>
+                                    <td>{{ car.current_mileage }}</td>
+                                </tr>
+                                <tr>
+                                    <th>تاریخ ثبت:</th>
+                                    <td>{{ car.created_at|date:"Y/m/d" }}</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-md-6">
+                            <h5 class="card-title">آخرین سرویس</h5>
+                            {% if services.exists %}
+                            {% with last_service=services.first %}
+                            <table class="table">
+                                <tr>
+                                    <th>تاریخ سرویس:</th>
+                                    <td>{{ last_service.date|date:"Y/m/d" }}</td>
+                                </tr>
+                                <tr>
+                                    <th>کیلومتر:</th>
+                                    <td>{{ last_service.mileage }}</td>
+                                </tr>
+                                <tr>
+                                    <th>نوع روغن:</th>
+                                    <td>{{ last_service.oil_type }}</td>
+                                </tr>
+                                <tr>
+                                    <th>سرویس بعدی:</th>
+                                    <td>{{ last_service.next_service_date|date:"Y/m/d" }}</td>
+                                </tr>
+                            </table>
+                            {% endwith %}
+                            {% else %}
+                            <p class="text-muted">هیچ سرویسی برای این خودرو ثبت نشده است.</p>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <h5 class="card-title mt-4">سوابق سرویس</h5>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>تاریخ</th>
+                                    <th>کیلومتر</th>
+                                    <th>نوع روغن</th>
+                                    <th>تعویض فیلتر هوا</th>
+                                    <th>تعویض فیلتر کابین</th>
+                                    <th>تعویض روغن گیربکس</th>
+                                    <th>سرویس بعدی</th>
+                                    <th>عملیات</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for service in services %}
+                                <tr>
+                                    <td>{{ service.date|date:"Y/m/d" }}</td>
+                                    <td>{{ service.mileage }}</td>
+                                    <td>{{ service.oil_type }}</td>
+                                    <td>
+                                        {% if service.air_filter_changed %}
+                                        <i class="fas fa-check text-success"></i>
+                                        {% else %}
+                                        <i class="fas fa-times text-danger"></i>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if service.cabin_filter_changed %}
+                                        <i class="fas fa-check text-success"></i>
+                                        {% else %}
+                                        <i class="fas fa-times text-danger"></i>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if service.gearbox_oil_changed %}
+                                        <i class="fas fa-check text-success"></i>
+                                        {% else %}
+                                        <i class="fas fa-times text-danger"></i>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ service.next_service_date|date:"Y/m/d" }}</td>
+                                    <td>
+                                        <a href="{% url 'service_detail' service.id %}" class="btn btn-sm btn-info">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="8" class="text-center">هیچ سرویسی ثبت نشده است.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

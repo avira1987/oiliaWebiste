@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}خانه - سیستم مدیریت سرویس دوره‌ای خودرو{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h2 class="card-title text-center mb-4">سیستم مدیریت سرویس دوره‌ای خودرو</h2>
+                    <p class="lead text-center">راهکار هوشمند برای مدیریت تعویض روغن و سرویس‌های دوره‌ای خودرو</p>
+                    
+                    <div class="row mt-5">
+                        <div class="col-md-4 text-center mb-4">
+                            <i class="fas fa-car fa-3x text-primary mb-3"></i>
+                            <h4>مدیریت خودروها</h4>
+                            <p>ثبت و پیگیری اطلاعات خودروها و مالکان</p>
+                        </div>
+                        <div class="col-md-4 text-center mb-4">
+                            <i class="fas fa-oil-can fa-3x text-primary mb-3"></i>
+                            <h4>سرویس‌های دوره‌ای</h4>
+                            <p>ثبت و پیگیری سرویس‌های انجام شده</p>
+                        </div>
+                        <div class="col-md-4 text-center mb-4">
+                            <i class="fas fa-bell fa-3x text-primary mb-3"></i>
+                            <h4>یادآوری هوشمند</h4>
+                            <p>ارسال پیامک یادآوری به مشتریان</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h3 class="card-title mb-4">مزایای استفاده از سیستم</h3>
+                    
+                    <div class="mb-4">
+                        <h5><i class="fas fa-check-circle text-success"></i> افزایش رضایت مشتریان</h5>
+                        <ul>
+                            <li>یادآوری خودکار زمان سرویس به مشتریان</li>
+                            <li>ثبت دقیق سوابق سرویس‌ها</li>
+                            <li>امکان پیگیری آنلاین وضعیت سرویس</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <h5><i class="fas fa-chart-line text-success"></i> بهبود کسب و کار</h5>
+                        <ul>
+                            <li>افزایش مراجعه مجدد مشتریان</li>
+                            <li>مدیریت بهتر موجودی قطعات و روغن</li>
+                            <li>گزارش‌گیری و تحلیل عملکرد</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <h5><i class="fas fa-users text-success"></i> توسعه شبکه همکاری</h5>
+                        <ul>
+                            <li>معرفی به همکاران و گسترش شبکه</li>
+                            <li>امکان مدیریت چند شعبه</li>
+                            <li>اشتراک‌گذاری تجربیات و دانش فنی</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title mb-4">آمار و ارقام</h3>
+                    
+                    <div class="row text-center">
+                        <div class="col-md-4 mb-4">
+                            <div class="border rounded p-3">
+                                <h2 class="text-primary">{{ total_services }}</h2>
+                                <p class="mb-0">سرویس ثبت شده</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <div class="border rounded p-3">
+                                <h2 class="text-primary">{{ total_cars }}</h2>
+                                <p class="mb-0">خودرو در سیستم</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <div class="border rounded p-3">
+                                <h2 class="text-primary">{{ total_mechanics }}</h2>
+                                <p class="mb-0">مکانیک فعال</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // ارسال یادآوری
+    document.querySelectorAll('.send-reminder').forEach(button => {
+        button.addEventListener('click', function() {
+            const serviceId = this.dataset.serviceId;
+            fetch(`/service/${serviceId}/send-reminder/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    alert('یادآوری با موفقیت ارسال شد.');
+                } else {
+                    alert('خطا در ارسال یادآوری: ' + data.message);
+                }
+            })
+            .catch(error => {
+                alert('خطا در ارسال یادآوری');
+            });
+        });
+    });
+});
+</script>
+{% endblock %} 

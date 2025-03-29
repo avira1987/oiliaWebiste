@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block title %}ثبت خودرو جدید - سیستم مدیریت سرویس خودرو{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h4 class="mb-0">ثبت خودرو جدید</h4>
+                    <a href="{% url 'car_list' %}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-right"></i> بازگشت به لیست
+                    </a>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="plate_number" class="form-label">شماره پلاک</label>
+                            <input type="text" class="form-control" id="plate_number" name="plate_number" 
+                                   pattern="\d{2}[A-Z]{3}\d{2}" 
+                                   title="شماره پلاک باید به فرمت 12ABC34 باشد"
+                                   placeholder="مثال: 12ABC34" required>
+                            <div class="form-text">شماره پلاک باید به فرمت 12ABC34 باشد</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="owner_name" class="form-label">نام مالک</label>
+                            <input type="text" class="form-control" id="owner_name" name="owner_name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="owner_phone" class="form-label">شماره تماس</label>
+                            <input type="tel" class="form-control" id="owner_phone" name="owner_phone" 
+                                   pattern="09[0-9]{9}" 
+                                   title="شماره موبایل باید با 09 شروع شود و 11 رقم باشد"
+                                   placeholder="مثال: 09123456789" required>
+                            <div class="form-text">شماره موبایل باید با 09 شروع شود و 11 رقم باشد</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="current_mileage" class="form-label">کیلومتر فعلی</label>
+                            <input type="number" class="form-control" id="current_mileage" name="current_mileage" 
+                                   min="0" value="0" required>
+                        </div>
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> ثبت خودرو
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 
